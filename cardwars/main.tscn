@@ -1,0 +1,40 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcqei64muvsa0"]
+
+[ext_resource type="Script" uid="uid://ccp7ruiqswq6j" path="res://main.gd" id="1_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://cn5ospl2phxg8" path="res://territory.tscn" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://doj54yg4f8tff" path="res://game_manager.gd" id="3_h2yge"]
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_0xm2m")
+
+[node name="Map" type="Node2D" parent="."]
+
+[node name="Territory1" parent="Map" instance=ExtResource("1_ig7tw")]
+position = Vector2(46, 48)
+territory_id = 1
+
+[node name="Territory2" parent="Map" instance=ExtResource("1_ig7tw")]
+position = Vector2(46, 2)
+territory_id = 2
+
+[node name="Territory3" parent="Map" instance=ExtResource("1_ig7tw")]
+position = Vector2(28, 25)
+territory_id = 3
+
+[node name="Territory4" parent="Map" instance=ExtResource("1_ig7tw")]
+position = Vector2(5, 6)
+territory_id = 4
+
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 15.0
+offset_bottom = 14.0
+
+[node name="GameManager" type="Node" parent="."]
+script = ExtResource("3_h2yge")
+
+[connection signal="territory_selected" from="Map/Territory1" to="GameManager" method="_on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory2" to="GameManager" method="_on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory3" to="GameManager" method="_on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory4" to="GameManager" method="_on_territory_selected"]
