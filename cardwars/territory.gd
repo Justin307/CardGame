@@ -30,6 +30,14 @@ func set_card_count(count: int) -> void:
 	cards = count
 	$Label.text = str(cards)
 
+# Get owner of territory
+func get_territory_owner() -> int:
+	return owner_id
+	
+# Get card count
+func get_card_count() -> int:
+	return cards
+
 func _ready() -> void:
 	# Připojení k input_event signálu Area2D
 	connect("input_event", Callable(self, "_on_input_event"))

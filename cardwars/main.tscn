@@ -34,7 +34,7 @@ offset_bottom = 14.0
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("3_h2yge")
 
-[connection signal="territory_selected" from="Map/Territory1" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory2" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory3" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory4" to="GameManager" method="_on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory1" to="GameManager" method="on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory2" to="GameManager" method="on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory3" to="GameManager" method="on_territory_selected"]
+[connection signal="territory_selected" from="Map/Territory4" to="GameManager" method="on_territory_selected"]
