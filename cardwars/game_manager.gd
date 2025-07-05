@@ -37,36 +37,40 @@ func _input(event):
 
 # When territory is selected/clicked
 func _on_territory_selected(territory_id):
-	# Check if it's the current player's territory for source selection
-	if source_territory_id == -1:
-		if territories[territory_id].get_territory_owner() != current_player:
-			print("ERROR: Can only attack from your own territories!")
-			return
-		if territories[territory_id].get_card_count() <= 1:
-			print("ERROR: Can't attack from territory ", territory_id, ", not enough cards.")
-		else:
-			source_territory_id = territory_id
-			print("Source territory id set to ", territory_id, " (Owner: ", territories[source_territory_id].get_territory_owner(), ")")
-	elif source_territory_id == territory_id:
-		# Deselect source territory
+	# Get clicked territory owner
+	var territory_owner = territories[territory_id].get_territory_owner()
+
+	if territory_owner == current_player:
+		clicked_own_territory(territory_id)
+	else:
+		clicked_other_territory(territory_id)
+
+
+# When own territory is clicked
+func clicked_own_territory(territory_id):
+	# Deselect source territory if clicked again
+	if source_territory_id == territory_id:
 		source_territory_id = -1
 		print("Source territory deselected")
-	elif target_territory_id == -1:
-		print("Checking target territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
-		# Check if the target territory is from different player
-		var source_owner = territories[source_territory_id].get_territory_owner()
-		var target_owner = territories[territory_id].get_territory_owner()
-		if source_owner == target_owner:
-			print("ERROR: Cannot attack own territory! Source owner: ", source_owner, ", Target owner: ", target_owner)
-		elif source_owner == -1 or target_owner == -1:
-			print("ERROR: One of the territories has no owner!")
-		else:
-			target_territory_id = territory_id
-			print("SUCCESS: Attack from player ", source_owner, " territory to player ", target_owner, " territory")
-			print("Target territory id set to ", territory_id)
-			fight()
-	print("Current source - ", source_territory_id)
-	print("Current target - ", target_territory_id)
+	elif territories[territory_id].get_card_count() <= 1:
+		print("Cannot select territory with one or less cards!")
+		return
+	else:
+		source_territory_id = territory_id
+		print("Clicked own territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
+
+# When other player's territory is clicked
+func clicked_other_territory(territory_id):
+	if source_territory_id == -1:
+		print("ERROR: No source territory selected! Cannot attack.")
+		return
+	else:
+		target_territory_id = territory_id
+		fight()
+		print("Clicked other territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
+
+	
+	return
 
 # Reset saved territory ids
 func reset_selection():
@@ -145,7 +149,8 @@ func fight():
 		# Defender wins - attacker loses cards
 		territories[source_territory_id].set_card_count(1)
 		print("Attack failed - attacker loses cards!")
-		
+
+	check_win_condition()
 	reset_selection()
 
 # Check if all cards have the same suit
