@@ -14,11 +14,11 @@ position = Vector2(224, 198)
 territory_id = 1
 
 [node name="Territory2" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(209, 175)
+position = Vector2(247, 211)
 territory_id = 2
 
 [node name="Territory3" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(247, 187)
+position = Vector2(247, 188)
 territory_id = 3
 
 [node name="Territory4" parent="Map" instance=ExtResource("1_ig7tw")]

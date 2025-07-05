@@ -8,6 +8,13 @@ var target_territory_id := -1
 var territories := {}
 # Current player (1 or 2)
 var current_player := 1
+# Territory adjacency map - defines which territories are neighbors
+var territory_neighbors := {
+	1: [2, 3, 4],
+	2: [1, 3],
+	3: [1, 2],
+	4: [1]
+}
 # Reference to UI elements
 var current_player_label
 var win_dialog
@@ -64,10 +71,15 @@ func clicked_other_territory(territory_id):
 	if source_territory_id == -1:
 		print("ERROR: No source territory selected! Cannot attack.")
 		return
-	else:
-		target_territory_id = territory_id
-		fight()
-		print("Clicked other territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
+	
+	# Check if territories are neighbors
+	if not are_territories_neighbors(source_territory_id, territory_id):
+		print("ERROR: Can only attack neighboring territories! Territory ", source_territory_id, " is not adjacent to ", territory_id)
+		return
+	
+	target_territory_id = territory_id
+	print("Attacking territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
+	fight()
 
 	
 	return
@@ -163,6 +175,12 @@ func check_all_same_suit(cards: Array) -> bool:
 		if card.suit != first_suit:
 			return false
 	return true
+
+# Check if two territories are neighbors
+func are_territories_neighbors(source_id: int, target_id: int) -> bool:
+	if territory_neighbors.has(source_id):
+		return target_id in territory_neighbors[source_id]
+	return false
 
 func generate_card():
 	# Card values: 2-10, J=11, Q=12, K=13, A=14
