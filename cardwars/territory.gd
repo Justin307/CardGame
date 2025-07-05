@@ -14,7 +14,7 @@ var player_colors = {
 	3: Color(1, 1, 0)    # Žlutá
 }
 
-# Signal when terriroty is selected/clicked
+# Signal when territory is selected/clicked
 signal territory_selected(territory_id: int)
 
 # Set owner of territory
@@ -39,12 +39,12 @@ func get_card_count() -> int:
 	return cards
 
 func _ready() -> void:
-	# Připojení k input_event signálu Area2D
+	# Connect to input_event signal of Area2D
 	connect("input_event", Callable(self, "_on_input_event"))
 
 # When mouse clicked
 func _on_input_event(_viewport, event, _shape_idx) -> void:
 	if event is InputEventMouseButton and event.pressed:
-		print("Kliknuto na území ID:", territory_id, " | hráč:", owner_id, " | karty:", cards)
-		# Emituje signál pro ostatní části hry
+		print("Clicked on territory ID:", territory_id, " | player:", owner_id, " | cards:", cards)
+		# Emit signal for other parts of the game
 		territory_selected.emit(territory_id)
