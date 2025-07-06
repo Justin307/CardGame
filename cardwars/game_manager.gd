@@ -19,6 +19,7 @@ var territory_neighbors := {
 var current_player_label
 var win_dialog
 var win_label
+var reset_confirm_dialog
 var battle_result_attacker_label
 var battle_result_defender_label
 var battle_result_outcome_label
@@ -36,6 +37,7 @@ func _ready() -> void:
 	current_player_label = get_parent().get_node("UI/BottomPanel/VBoxContainer/CurrentPlayerLabel")
 	win_dialog = get_parent().get_node("UI/WinDialog")
 	win_label = get_parent().get_node("UI/WinDialog/WinLabel")
+	reset_confirm_dialog = get_parent().get_node("UI/ResetConfirmDialog")
 	battle_result_attacker_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/AttackerLabel")
 	battle_result_defender_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/DefenderLabel")
 	battle_result_outcome_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/ResultLabel")
@@ -120,12 +122,12 @@ func fight():
 	# Print cards and values
 	print("Attacker (player ", territories[source_territory_id].get_territory_owner(), ") cards:")
 	for card in source_cards:
-		print("  ", card.value, card.suit)
+		print("  ", card.display_value, card.suit)
 	print("  Total value: ", source_total_value)
 	
 	print("Defender (player ", territories[target_territory_id].get_territory_owner(), ") cards:")
 	for card in target_cards:
-		print("  ", card.value, card.suit)
+		print("  ", card.display_value, card.suit)
 	print("  Total value: ", target_total_value)
 	
 	# Determine winner based on game rules
@@ -205,8 +207,23 @@ func generate_card():
 	# Return as dictionary
 	return {
 		"value": random_value,
-		"suit": random_suit
+		"suit": random_suit,
+		"display_value": get_card_display_value(random_value)
 	}
+
+# Convert numeric card value to display string
+func get_card_display_value(value: int) -> String:
+	match value:
+		11:
+			return "J"
+		12:
+			return "Q"
+		13:
+			return "K"
+		14:
+			return "A"
+		_:
+			return str(value)
 
 # Update UI elements
 func update_ui():
@@ -219,14 +236,14 @@ func update_battle_result_panel(attacker_cards: Array, defender_cards: Array, at
 	var attacker_player = territories[source_territory_id].get_territory_owner()
 	var attacker_cards_text = ""
 	for card in attacker_cards:
-		attacker_cards_text += str(card.value) + card.suit + " "
+		attacker_cards_text += card.display_value + card.suit + " "
 	battle_result_attacker_label.text = "Attacker (Player " + str(attacker_player) + "): " + attacker_cards_text.strip_edges() + " (Total: " + str(attacker_total) + ")"
 	
 	# Update defender info
 	var defender_player = territories[target_territory_id].get_territory_owner()
 	var defender_cards_text = ""
 	for card in defender_cards:
-		defender_cards_text += str(card.value) + card.suit + " "
+		defender_cards_text += card.display_value + card.suit + " "
 	battle_result_defender_label.text = "Defender (Player " + str(defender_player) + "): " + defender_cards_text.strip_edges() + " (Total: " + str(defender_total) + ")"
 	
 	# Update result
@@ -252,10 +269,21 @@ func _on_end_turn_pressed():
 	# Check for win condition
 	check_win_condition()
 
-# Reset game button pressed
-func _on_reset_pressed():
-	print("Reset game pressed")
+# Reset game button pressed - show confirmation dialog
+func _on_reset_button_pressed():
+	print("Reset button pressed - showing confirmation")
+	reset_confirm_dialog.popup_centered()
+
+# Reset game confirmed
+func _on_reset_confirm_pressed():
+	print("Reset confirmed")
+	reset_confirm_dialog.hide()
 	reset_game()
+
+# Reset game cancelled
+func _on_reset_cancel_pressed():
+	print("Reset cancelled")
+	reset_confirm_dialog.hide()
 
 # Reset the entire game to initial state
 func reset_game():

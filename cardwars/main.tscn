@@ -92,6 +92,25 @@ text = "Player X Wins!"
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="ResetConfirmDialog" type="ConfirmationDialog" parent="UI"]
+title = "Confirm Reset"
+initial_position = 1
+size = Vector2i(350, 150)
+ok_button_text = "Yes"
+
+[node name="ResetConfirmLabel" type="Label" parent="UI/ResetConfirmDialog"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+text = "Are you sure you want to start a new game?
+All progress will be lost."
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="BattleResultPanel" type="Panel" parent="UI"]
 layout_mode = 1
 anchors_preset = 2
@@ -139,6 +158,8 @@ script = ExtResource("3_h2yge")
 [connection signal="territory_selected" from="Map/Territory3" to="GameManager" method="_on_territory_selected"]
 [connection signal="territory_selected" from="Map/Territory4" to="GameManager" method="_on_territory_selected"]
 [connection signal="pressed" from="UI/BottomPanel/VBoxContainer/EndTurnButton" to="GameManager" method="_on_end_turn_pressed"]
-[connection signal="pressed" from="UI/BottomPanel/VBoxContainer/ResetButton" to="GameManager" method="_on_reset_pressed"]
+[connection signal="pressed" from="UI/BottomPanel/VBoxContainer/ResetButton" to="GameManager" method="_on_reset_button_pressed"]
 [connection signal="canceled" from="UI/WinDialog" to="GameManager" method="_on_close_pressed"]
 [connection signal="confirmed" from="UI/WinDialog" to="GameManager" method="_on_play_again_pressed"]
+[connection signal="canceled" from="UI/ResetConfirmDialog" to="GameManager" method="_on_reset_cancel_pressed"]
+[connection signal="confirmed" from="UI/ResetConfirmDialog" to="GameManager" method="_on_reset_confirm_pressed"]
