@@ -39,10 +39,10 @@ anchors_preset = 12
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 911.0
-offset_top = 530.0
-offset_right = 1152.0
-offset_bottom = 648.0
+offset_left = 901.0
+offset_top = 511.0
+offset_right = 1142.0
+offset_bottom = 638.0
 grow_horizontal = 2
 grow_vertical = 0
 
@@ -54,7 +54,7 @@ anchor_bottom = 1.0
 offset_left = 11.0
 offset_top = 9.0
 offset_right = -12.0
-offset_bottom = -11.0
+offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -91,6 +91,45 @@ offset_bottom = -49.0
 text = "Player X Wins!"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BattleResultPanel" type="Panel" parent="UI"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 511.0
+offset_right = 891.0
+offset_bottom = 638.0
+grow_vertical = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/BattleResultPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 11.0
+offset_right = -12.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="UI/BattleResultPanel/VBoxContainer"]
+layout_mode = 2
+text = "Last Battle:"
+
+[node name="AttackerLabel" type="Label" parent="UI/BattleResultPanel/VBoxContainer"]
+layout_mode = 2
+text = "Attacker: -"
+
+[node name="DefenderLabel" type="Label" parent="UI/BattleResultPanel/VBoxContainer"]
+layout_mode = 2
+text = "Defender: -"
+
+[node name="ResultLabel" type="Label" parent="UI/BattleResultPanel/VBoxContainer"]
+layout_mode = 2
+text = "No battles yet"
 
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("3_h2yge")

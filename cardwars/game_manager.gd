@@ -19,6 +19,9 @@ var territory_neighbors := {
 var current_player_label
 var win_dialog
 var win_label
+var battle_result_attacker_label
+var battle_result_defender_label
+var battle_result_outcome_label
 
 # When ready
 func _ready() -> void:
@@ -33,6 +36,9 @@ func _ready() -> void:
 	current_player_label = get_parent().get_node("UI/BottomPanel/VBoxContainer/CurrentPlayerLabel")
 	win_dialog = get_parent().get_node("UI/WinDialog")
 	win_label = get_parent().get_node("UI/WinDialog/WinLabel")
+	battle_result_attacker_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/AttackerLabel")
+	battle_result_defender_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/DefenderLabel")
+	battle_result_outcome_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/ResultLabel")
 	update_ui()
 
 # Handle input events (like Escape key)
@@ -51,7 +57,6 @@ func _on_territory_selected(territory_id):
 		clicked_own_territory(territory_id)
 	else:
 		clicked_other_territory(territory_id)
-
 
 # When own territory is clicked
 func clicked_own_territory(territory_id):
@@ -80,9 +85,6 @@ func clicked_other_territory(territory_id):
 	target_territory_id = territory_id
 	print("Attacking territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
 	fight()
-
-	
-	return
 
 # Reset saved territory ids
 func reset_selection():
@@ -128,12 +130,15 @@ func fight():
 	
 	# Determine winner based on game rules
 	var attacker_wins = false
+	var result_text = ""
 	
 	if source_total_value > target_total_value:
 		attacker_wins = true
+		result_text = "Attacker wins with higher total value!"
 		print("RESULT: Attacker wins with higher total value!")
 	elif source_total_value < target_total_value:
 		attacker_wins = false
+		result_text = "Defender wins with higher total value!"
 		print("RESULT: Defender wins with higher total value!")
 	else:
 		# Tie - check for same suit bonus (all cards same color)
@@ -142,12 +147,15 @@ func fight():
 		
 		if source_all_same_suit and not target_all_same_suit:
 			attacker_wins = true
+			result_text = "Tie broken - Attacker wins with all same suit!"
 			print("RESULT: Tie broken - Attacker wins with all same suit!")
 		elif target_all_same_suit and not source_all_same_suit:
 			attacker_wins = false
+			result_text = "Tie broken - Defender wins with all same suit!"
 			print("RESULT: Tie broken - Defender wins with all same suit!")
 		else:
 			attacker_wins = false
+			result_text = "Tie - Defender wins by default!"
 			print("RESULT: Tie - Defender wins by default!")
 	
 	# Apply battle results
@@ -162,6 +170,8 @@ func fight():
 		territories[source_territory_id].set_card_count(1)
 		print("Attack failed - attacker loses cards!")
 
+	# Update battle result panel
+	update_battle_result_panel(source_cards, target_cards, source_total_value, target_total_value, result_text)
 	check_win_condition()
 	reset_selection()
 
@@ -202,6 +212,25 @@ func generate_card():
 func update_ui():
 	if current_player_label:
 		current_player_label.text = "Current Player: " + str(current_player)
+
+# Update battle result panel with cards and results
+func update_battle_result_panel(attacker_cards: Array, defender_cards: Array, attacker_total: int, defender_total: int, result_text: String):
+	# Update attacker info
+	var attacker_player = territories[source_territory_id].get_territory_owner()
+	var attacker_cards_text = ""
+	for card in attacker_cards:
+		attacker_cards_text += str(card.value) + card.suit + " "
+	battle_result_attacker_label.text = "Attacker (Player " + str(attacker_player) + "): " + attacker_cards_text.strip_edges() + " (Total: " + str(attacker_total) + ")"
+	
+	# Update defender info
+	var defender_player = territories[target_territory_id].get_territory_owner()
+	var defender_cards_text = ""
+	for card in defender_cards:
+		defender_cards_text += str(card.value) + card.suit + " "
+	battle_result_defender_label.text = "Defender (Player " + str(defender_player) + "): " + defender_cards_text.strip_edges() + " (Total: " + str(defender_total) + ")"
+	
+	# Update result
+	battle_result_outcome_label.text = result_text
 
 # End turn button pressed
 func _on_end_turn_pressed():
@@ -246,6 +275,11 @@ func reset_game():
 	# Reset selection
 	reset_selection()
 	update_ui()
+	
+	# Clear battle result panel
+	battle_result_attacker_label.text = "Attacker: -"
+	battle_result_defender_label.text = "Defender: -"
+	battle_result_outcome_label.text = "No battles yet"
 	
 	print("Game reset to initial state")
 
