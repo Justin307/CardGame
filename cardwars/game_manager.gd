@@ -32,6 +32,8 @@ func _ready() -> void:
 		# Check if the child is territory
 		if child.scene_file_path == "res://territory.tscn":
 			territories[child.territory_id] = child
+			# Auto-connect the territory_selected signal
+			child.territory_selected.connect(_on_territory_selected)
 	
 	# Get reference to UI elements
 	current_player_label = get_parent().get_node("UI/BottomPanel/VBoxContainer/CurrentPlayerLabel")

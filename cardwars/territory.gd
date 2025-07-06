@@ -14,6 +14,8 @@ var player_colors = {
 	3: Color(1, 1, 0)    # Žlutá
 }
 
+var neighbors = []
+
 # Signal when territory is selected/clicked
 signal territory_selected(territory_id: int)
 
@@ -29,6 +31,9 @@ func set_territory_owner(player_id: int) -> void:
 func set_card_count(count: int) -> void:
 	cards = count
 	$Label.text = str(cards)
+	
+func add_neighbor(neighbor_id: int):
+	neighbors.append(neighbor_id)
 
 # Get owner of territory
 func get_territory_owner() -> int:
@@ -37,6 +42,9 @@ func get_territory_owner() -> int:
 # Get card count
 func get_card_count() -> int:
 	return cards
+	
+func get_neighbors() -> Array:
+	return neighbors
 
 func _ready() -> void:
 	# Connect to input_event signal of Area2D

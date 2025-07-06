@@ -1,29 +1,32 @@
-[gd_scene load_steps=4 format=3 uid="uid://dcqei64muvsa0"]
+[gd_scene load_steps=8 format=3 uid="uid://dcqei64muvsa0"]
 
 [ext_resource type="Script" uid="uid://ccp7ruiqswq6j" path="res://main.gd" id="1_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://cn5ospl2phxg8" path="res://territory.tscn" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://c4nayl4mjwdtm" path="res://territory_L.tscn" id="2_272bh"]
+[ext_resource type="PackedScene" uid="uid://d2jxwwo614it6" path="res://territory_S.tscn" id="3_5vw27"]
 [ext_resource type="Script" uid="uid://doj54yg4f8tff" path="res://game_manager.gd" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cn5ospl2phxg8" path="res://territory_square.tscn" id="4_kek77"]
+[ext_resource type="PackedScene" uid="uid://likotftipkfe" path="res://territory_straight.tscn" id="5_4c57u"]
+[ext_resource type="PackedScene" uid="uid://ceie8ycc6lojf" path="res://territory_T.tscn" id="6_efxa6"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_0xm2m")
 
 [node name="Map" type="Node2D" parent="."]
 
-[node name="Territory1" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(224, 198)
-territory_id = 1
+[node name="TerritoryL" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(329, 119)
 
-[node name="Territory2" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(247, 211)
-territory_id = 2
+[node name="TerritoryS" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(329, 71)
 
-[node name="Territory3" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(247, 188)
-territory_id = 3
+[node name="TerritorySquare" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(425, 119)
 
-[node name="Territory4" parent="Map" instance=ExtResource("1_ig7tw")]
-position = Vector2(210, 221)
-territory_id = 4
+[node name="TerritoryT" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(329, 167)
+
+[node name="Territory" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(377, 95)
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -153,10 +156,6 @@ text = "No battles yet"
 [node name="GameManager" type="Node" parent="."]
 script = ExtResource("3_h2yge")
 
-[connection signal="territory_selected" from="Map/Territory1" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory2" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory3" to="GameManager" method="_on_territory_selected"]
-[connection signal="territory_selected" from="Map/Territory4" to="GameManager" method="_on_territory_selected"]
 [connection signal="pressed" from="UI/BottomPanel/VBoxContainer/EndTurnButton" to="GameManager" method="_on_end_turn_pressed"]
 [connection signal="pressed" from="UI/BottomPanel/VBoxContainer/ResetButton" to="GameManager" method="_on_reset_button_pressed"]
 [connection signal="canceled" from="UI/WinDialog" to="GameManager" method="_on_close_pressed"]
