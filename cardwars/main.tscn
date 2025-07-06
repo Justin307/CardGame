@@ -13,20 +13,25 @@ script = ExtResource("1_0xm2m")
 
 [node name="Map" type="Node2D" parent="."]
 
-[node name="TerritoryL" parent="Map" instance=ExtResource("2_272bh")]
-position = Vector2(329, 119)
+[node name="Territory - 1" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(99, 151)
+territory_id = 1
 
-[node name="TerritoryS" parent="Map" instance=ExtResource("3_5vw27")]
-position = Vector2(329, 71)
+[node name="Territory - 2" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(99, 103)
+territory_id = 2
 
-[node name="TerritorySquare" parent="Map" instance=ExtResource("4_kek77")]
-position = Vector2(425, 119)
+[node name="Territory - 3" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(99, 199)
+territory_id = 3
 
-[node name="TerritoryT" parent="Map" instance=ExtResource("5_4c57u")]
-position = Vector2(329, 167)
+[node name="Territory - 4" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(147, 199)
+territory_id = 4
 
-[node name="Territory" parent="Map" instance=ExtResource("6_efxa6")]
-position = Vector2(377, 95)
+[node name="Territory - 5" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(147, 127)
+territory_id = 5
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3

@@ -10,10 +10,11 @@ var territories := {}
 var current_player := 1
 # Territory adjacency map - defines which territories are neighbors
 var territory_neighbors := {
-	1: [2, 3, 4],
-	2: [1, 3],
-	3: [1, 2],
-	4: [1]
+	1: [2, 3],
+	2: [1, 5],
+	3: [1, 4],
+	4: [3, 5],
+	5: [2, 4]
 }
 # Reference to UI elements
 var current_player_label
@@ -29,8 +30,8 @@ func _ready() -> void:
 	# Register territories into list
 	var map = get_parent().get_node("Map")
 	for child in map.get_children():
-		# Check if the child is territory
-		if child.scene_file_path == "res://territory.tscn":
+		# Check if the child is in the "territories" group
+		if child.is_in_group("territories"):
 			territories[child.territory_id] = child
 			# Auto-connect the territory_selected signal
 			child.territory_selected.connect(_on_territory_selected)
@@ -292,15 +293,23 @@ func reset_game():
 	# Reset player
 	current_player = 1
 	
-	# Reset territories to initial state (from main.gd)
-	territories[1].set_territory_owner(1)
-	territories[1].set_card_count(2)
-	territories[2].set_territory_owner(1)
-	territories[2].set_card_count(1)
-	territories[3].set_territory_owner(2)
-	territories[3].set_card_count(4)
-	territories[4].set_territory_owner(2)
-	territories[4].set_card_count(3)
+	# Get all territory IDs and shuffle them for random assignment
+	var territory_ids = territories.keys()
+	territory_ids.shuffle()
+	
+	# Assign territories randomly to players (split evenly)
+	var territories_per_player = int(territory_ids.size() / 2)
+	
+	# Assign first half to player 1, second half to player 2
+	for i in range(territory_ids.size()):
+		var territory_id = territory_ids[i]
+		var player_owner = 1 if i < territories_per_player else 2
+		var random_card_count = randi_range(1, 4)
+		
+		territories[territory_id].set_territory_owner(player_owner)
+		territories[territory_id].set_card_count(random_card_count)
+		
+		print("Territory ", territory_id, " assigned to Player ", player_owner, " with ", random_card_count, " cards")
 	
 	# Reset selection
 	reset_selection()
@@ -311,7 +320,7 @@ func reset_game():
 	battle_result_defender_label.text = "Defender: -"
 	battle_result_outcome_label.text = "No battles yet"
 	
-	print("Game reset to initial state")
+	print("Game reset to initial state with random territory assignment")
 
 # Check if someone won the game
 func check_win_condition():

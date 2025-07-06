@@ -47,6 +47,8 @@ func get_neighbors() -> Array:
 	return neighbors
 
 func _ready() -> void:
+	# Add this territory to the territories group
+	add_to_group("territories")
 	# Connect to input_event signal of Area2D
 	connect("input_event", Callable(self, "_on_input_event"))
 
