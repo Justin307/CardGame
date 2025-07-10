@@ -20,3 +20,8 @@ offset_right = 48.0
 offset_bottom = 48.0
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(6, 0, 48, 0, 48, 48, 0, 48, 0, 0, 6, 0)
+width = 2.0
+default_color = Color(0, 0, 0, 1)

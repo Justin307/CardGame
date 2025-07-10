@@ -17,3 +17,8 @@ vertical_alignment = 1
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="."]
 polygon = PackedVector2Array(0, 0, 24, 0, 24, 24, 48, 24, 48, 48, 48, 72, 24, 72, 24, 48, 0, 48, 0, 24)
+
+[node name="Line2D" type="Line2D" parent="."]
+points = PackedVector2Array(7, 0, 24, 0, 24, 24, 48, 24, 48, 72, 24, 72, 24, 48, 0, 48, 0, 0, 7, 0)
+width = 2.0
+default_color = Color(0, 0, 0, 1)
