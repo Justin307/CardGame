@@ -8,6 +8,8 @@ var target_territory_id := -1
 var territories := {}
 # Current player (1 or 2)
 var current_player := 1
+# Number of players
+var player_count := 3 # Change this to desired number of players
 # Territory adjacency map - defines which territories are neighbors
 var territory_neighbors := {
 	1: [2, 3],
@@ -44,14 +46,20 @@ func _ready() -> void:
 	battle_result_attacker_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/AttackerLabel")
 	battle_result_defender_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/DefenderLabel")
 	battle_result_outcome_label = get_parent().get_node("UI/BattleResultPanel/VBoxContainer/ResultLabel")
-	update_ui()
+	reset_game()
 
-# Handle input events (like Escape key)
+# Handle input events
 func _input(event):
 	if event is InputEventKey and event.pressed:
 		if event.keycode == KEY_ESCAPE:
 			print("Escape pressed - closing application")
 			get_tree().quit()
+		elif event.keycode == KEY_SPACE:
+			if win_dialog and not win_dialog.visible:
+				print("Space pressed - ending turn")
+				_on_end_turn_pressed()
+			else:
+				print("Space pressed but win dialog is visible; ignoring.")
 
 # When territory is selected/clicked
 func _on_territory_selected(territory_id):
@@ -67,12 +75,16 @@ func _on_territory_selected(territory_id):
 func clicked_own_territory(territory_id):
 	# Deselect source territory if clicked again
 	if source_territory_id == territory_id:
+		territories[territory_id].set_active(false)
 		source_territory_id = -1
 		print("Source territory deselected")
 	elif territories[territory_id].get_card_count() <= 1:
 		print("Cannot select territory with one or less cards!")
 		return
 	else:
+		if source_territory_id != -1:
+			territories[source_territory_id].set_active(false)
+		territories[territory_id].set_active(true)
 		source_territory_id = territory_id
 		print("Clicked own territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
 
@@ -87,6 +99,7 @@ func clicked_other_territory(territory_id):
 		print("ERROR: Can only attack neighboring territories! Territory ", source_territory_id, " is not adjacent to ", territory_id)
 		return
 	
+	territories[source_territory_id].set_active(false)
 	target_territory_id = territory_id
 	print("Attacking territory ", territory_id, " (Owner: ", territories[territory_id].get_territory_owner(), ")")
 	fight()
@@ -231,24 +244,25 @@ func get_card_display_value(value: int) -> String:
 # Update UI elements
 func update_ui():
 	if current_player_label:
-		current_player_label.text = "Current Player: " + str(current_player)
+		var color_name = Global.player_colors[current_player][2]
+		current_player_label.text = "Current Player: " + color_name
 
 # Update battle result panel with cards and results
 func update_battle_result_panel(attacker_cards: Array, defender_cards: Array, attacker_total: int, defender_total: int, result_text: String):
 	# Update attacker info
 	var attacker_player = territories[source_territory_id].get_territory_owner()
+	var attacker_color = Global.player_colors[attacker_player][2]
 	var attacker_cards_text = ""
 	for card in attacker_cards:
 		attacker_cards_text += card.display_value + card.suit + " "
-	battle_result_attacker_label.text = "Attacker (Player " + str(attacker_player) + "): " + attacker_cards_text.strip_edges() + " (Total: " + str(attacker_total) + ")"
-	
+	battle_result_attacker_label.text = "Attacker (" + attacker_color + "): " + attacker_cards_text.strip_edges() + " (Total: " + str(attacker_total) + ")"
 	# Update defender info
 	var defender_player = territories[target_territory_id].get_territory_owner()
+	var defender_color = Global.player_colors[defender_player][2]
 	var defender_cards_text = ""
 	for card in defender_cards:
 		defender_cards_text += card.display_value + card.suit + " "
-	battle_result_defender_label.text = "Defender (Player " + str(defender_player) + "): " + defender_cards_text.strip_edges() + " (Total: " + str(defender_total) + ")"
-	
+	battle_result_defender_label.text = "Defender (" + defender_color + "): " + defender_cards_text.strip_edges() + " (Total: " + str(defender_total) + ")"
 	# Update result
 	battle_result_outcome_label.text = result_text
 
@@ -258,12 +272,25 @@ func _on_end_turn_pressed():
 	
 	# Add cards to all territories at end of turn
 	for territory in territories.values():
-		if territory.get_card_count() < 6:  # Max 6 cards per territory
+		if territory.get_card_count() < 6 and territory.get_territory_owner() == current_player:  # Max 6 cards per territory
 			territory.set_card_count(territory.get_card_count() + 1)
 	
-	# Switch to next player
-	current_player = 3 - current_player  # Switches between 1 and 2
-	print("Switched to player ", current_player)
+	# Switch to next player who has at least one territory
+	var next_player = current_player
+	var found = false
+	for i in range(player_count):
+		next_player = (next_player % player_count) + 1
+		for territory in territories.values():
+			if territory.get_territory_owner() == next_player:
+				found = true
+				break
+		if found:
+			break
+	if found:
+		current_player = next_player
+		print("Switched to player ", current_player)
+	else:
+		print("No next player with territory found.")
 	
 	# Reset selection
 	reset_selection()
@@ -298,12 +325,12 @@ func reset_game():
 	territory_ids.shuffle()
 	
 	# Assign territories randomly to players (split evenly)
-	var territories_per_player = int(territory_ids.size() / 2)
+	var territories_per_player = int(territory_ids.size() / player_count)
 	
-	# Assign first half to player 1, second half to player 2
+	# Assign territories to players
 	for i in range(territory_ids.size()):
 		var territory_id = territory_ids[i]
-		var player_owner = 1 if i < territories_per_player else 2
+		var player_owner = (i % player_count) + 1
 		var random_card_count = randi_range(1, 4)
 		
 		territories[territory_id].set_territory_owner(player_owner)
@@ -324,25 +351,21 @@ func reset_game():
 
 # Check if someone won the game
 func check_win_condition():
-	var player_id = -1
-	
+	var remaining_players = []
 	for territory in territories.values():
 		var territory_owner = territory.get_territory_owner()
-		if player_id == -1:
-			player_id = territory_owner
-		elif player_id != territory_owner:
-			# If we find a territory owned by a different player, we can stop
-			return
-	print("GAME OVER: Player ", player_id, " wins!")
-	show_win_dialog(player_id)
+		if not remaining_players.has(territory_owner):
+			remaining_players.append(territory_owner)
+	if remaining_players.size() == 1:
+		print("GAME OVER: Player ", remaining_players[0], " wins!")
+		show_win_dialog(remaining_players[0])
 
 # Show win dialog (placeholder for now)
 func show_win_dialog(winner_player: int):
 	print("Player ", winner_player, " has won the game!")
-	
 	# Update win dialog text
-	win_label.text = "Player " + str(winner_player) + " Wins!"
-	
+	var color_name = Global.player_colors[winner_player][2]
+	win_label.text = color_name + " Wins!"
 	# Show the dialog
 	win_dialog.popup_centered()
 

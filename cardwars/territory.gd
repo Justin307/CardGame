@@ -6,13 +6,8 @@ extends Area2D
 var owner_id: int = -1
 # Card count
 var cards: int = 0
-# Player colors
-var player_colors = {
-	0: Color(1, 0, 0),   # Červená
-	1: Color(0, 0, 1),   # Modrá
-	2: Color(0, 1, 0),   # Zelená
-	3: Color(1, 1, 0)    # Žlutá
-}
+# Active
+var active: bool = false
 
 var neighbors = []
 
@@ -22,15 +17,17 @@ signal territory_selected(territory_id: int)
 # Set owner of territory
 func set_territory_owner(player_id: int) -> void:
 	owner_id = player_id
-	if player_colors.has(player_id):
-		$Polygon2D.color = player_colors[player_id]
-	else:
-		$Polygon2D.color = Color(1, 1, 1) # VWhite
+	update_color()
 
 # Set card count
 func set_card_count(count: int) -> void:
 	cards = count
 	$Label.text = str(cards)
+	
+# Set active
+func set_active(state: bool) -> void:
+	active = state
+	update_color()
 	
 func add_neighbor(neighbor_id: int):
 	neighbors.append(neighbor_id)
@@ -45,12 +42,25 @@ func get_card_count() -> int:
 	
 func get_neighbors() -> Array:
 	return neighbors
+	
+func update_color() -> void:
+	if Global.player_colors.has(owner_id):
+		if active:
+			$Polygon2D.color = Global.player_colors[owner_id][1]
+		else:
+			$Polygon2D.color = Global.player_colors[owner_id][0]
+	else:
+		$Polygon2D.color = Color(1, 1, 1) # White
+
+func _draw() -> void:
+	$Label.add_theme_color_override("font_color", Color(0,0,0))
 
 func _ready() -> void:
 	# Add this territory to the territories group
 	add_to_group("territories")
 	# Connect to input_event signal of Area2D
 	connect("input_event", Callable(self, "_on_input_event"))
+	connect("draw", Callable(self, "_draw"))
 
 # When mouse clicked
 func _on_input_event(_viewport, event, _shape_idx) -> void:
