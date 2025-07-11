@@ -20,6 +20,6 @@ vertical_alignment = 1
 polygon = PackedVector2Array(0, 0, 24, 0, 48, 0, 72, 0, 72, 24, 48, 24, 48, 72, 24, 72, 24, 24, 0, 24)
 
 [node name="Line2D" type="Line2D" parent="."]
-points = PackedVector2Array(6, 0, 72, 0, 72, 24, 48.0465, 24.0707, 48, 72, 24, 72, 24, 24, 0, 24, 0, 0, 6, 0)
+points = PackedVector2Array(6, 0, 72, 0, 72, 24, 48, 24, 48, 72, 24, 72, 24, 24, 0, 24, 0, 0, 6, 0)
 width = 2.0
 default_color = Color(0, 0, 0, 1)

@@ -13,25 +13,109 @@ script = ExtResource("1_0xm2m")
 
 [node name="Map" type="Node2D" parent="."]
 
-[node name="Territory - 1" parent="Map" instance=ExtResource("2_272bh")]
-position = Vector2(99, 151)
+[node name="Territory1" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(368, 161)
 territory_id = 1
 
-[node name="Territory - 2" parent="Map" instance=ExtResource("3_5vw27")]
-position = Vector2(99, 103)
+[node name="Territory2" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(416, 185)
 territory_id = 2
 
-[node name="Territory - 3" parent="Map" instance=ExtResource("4_kek77")]
-position = Vector2(99, 199)
+[node name="Territory3" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(464, 185)
 territory_id = 3
 
-[node name="Territory - 4" parent="Map" instance=ExtResource("5_4c57u")]
-position = Vector2(147, 199)
+[node name="Territory4" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(512, 161)
 territory_id = 4
 
-[node name="Territory - 5" parent="Map" instance=ExtResource("6_efxa6")]
-position = Vector2(147, 127)
+[node name="Territory5" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(584, 161)
 territory_id = 5
+
+[node name="Territory6" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(560, 185)
+territory_id = 6
+
+[node name="Territory7" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(656, 185)
+territory_id = 7
+
+[node name="Territory8" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(368, 209)
+territory_id = 8
+
+[node name="Territory9" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(416, 233)
+territory_id = 9
+
+[node name="Territory10" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(488, 233)
+territory_id = 10
+
+[node name="Territory11" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(536, 233)
+territory_id = 11
+
+[node name="Territory12" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(488, 281)
+territory_id = 12
+
+[node name="Territory13" parent="Map" instance=ExtResource("2_272bh")]
+position = Vector2(464, 281)
+territory_id = 13
+
+[node name="Territory14" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(392, 257)
+territory_id = 14
+
+[node name="Territory15" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(344, 281)
+territory_id = 15
+
+[node name="Territory16" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(344, 329)
+territory_id = 16
+
+[node name="Territory17" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(416, 353)
+territory_id = 17
+
+[node name="Territory18" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(464, 329)
+territory_id = 18
+
+[node name="Territory19" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(512, 305)
+territory_id = 19
+
+[node name="Territory20" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(536, 377)
+territory_id = 20
+
+[node name="Territory21" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(560, 305)
+territory_id = 21
+
+[node name="Territory22" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(607, 329)
+territory_id = 22
+
+[node name="Territory23" parent="Map" instance=ExtResource("5_4c57u")]
+position = Vector2(631, 305)
+territory_id = 23
+
+[node name="Territory24" parent="Map" instance=ExtResource("4_kek77")]
+position = Vector2(656, 257)
+territory_id = 24
+
+[node name="Territory25" parent="Map" instance=ExtResource("6_efxa6")]
+position = Vector2(608, 233)
+territory_id = 25
+
+[node name="Territory26" parent="Map" instance=ExtResource("3_5vw27")]
+position = Vector2(654, 329)
+territory_id = 26
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
