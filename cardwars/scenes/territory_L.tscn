@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://c4nayl4mjwdtm"]
 
-[ext_resource type="Script" uid="uid://cg5gd2312h3ef" path="res://territory.gd" id="1_5op02"]
+[ext_resource type="Script" uid="uid://cg5gd2312h3ef" path="res://scripts/territory.gd" id="1_5op02"]
 
 [node name="TerritoryL" type="Area2D"]
 position = Vector2(-0.0464935, -0.0706816)

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ceie8ycc6lojf"]
 
-[ext_resource type="Script" uid="uid://cg5gd2312h3ef" path="res://territory.gd" id="1_5op02"]
+[ext_resource type="Script" uid="uid://cg5gd2312h3ef" path="res://scripts/territory.gd" id="1_5op02"]
 
 [node name="TerritoryT" type="Area2D"]
 script = ExtResource("1_5op02")
